@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  title: Employee API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /employees:
+    get:
+      summary: Get all employees
+      tags:
+        - Employees
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+
+    post:
+      summary: Create a new employee
+      tags:
+        - Employees
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+            example:
+              firstName: John
+              lastName: Doe
+              email: john.doe@example.com
+      responses:
+        "201":
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+
+  /employees/{id}:
+    get:
+      summary: Get employee by ID
+      tags:
+        - Employees
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Employee found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        "404":
+          description: Employee not found
+
+    put:
+      summary: Update an existing employee
+      tags:
+        - Employees
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeInput'
+            example:
+              firstName: Jane
+              lastName: Smith
+              email: jane.smith@example.com
+      responses:
+        "200":
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        "404":
+          description: Employee not found
+
+    delete:
+      summary: Delete employee by ID
+      tags:
+        - Employees
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Employee deleted successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Employee Deleted Successfully
+        "404":
+          description: Employee not found
+
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+
+    EmployeeInput:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: john.doe@example.com
+      required:
+        - firstName
+        - lastName
+        - email
